@@ -101,8 +101,6 @@ void ext_SSTART(void)
 	{
 		LeakWatch_begin(cmd_post);
 	}
-
-	enter_ghost_space(((hardwareRevision == 3) ? (void*)HeapDeref(h) : (void*)0x3E000));
 	
 	savedctrl=NG_control;
 	SET_SIDE_EFFECTS_PERMITTED;
@@ -154,17 +152,17 @@ void ext_SSTART(void)
 	src+=2;
 		
 	TRY	
-		if(*(UCHAR*)dest==ASM_PRGM_TAG)
+		if(*(UCHAR*)dest==ASM_PRGM_TAG && hardwareRevision < 2)
 		{
 			if(symptr->Flags&SF_EXTMEM)
 			{//located in the archive; a copy is necessary
 				h_alloc=HeapAllocHighThrow(len);
-				dest=((char*)HeapDeref(h_alloc)) + ((hardwareRevision == 3) ? 0 : 0x40000);
+				dest=((char*)HeapDeref(h_alloc)) + ((hardwareRevision == 2) ? 0 : 0x40000);
 				memcpy(dest,src,len);
 			}
 			else
 			{
-				src = src + ((hardwareRevision == 3) ? 0 : 0x40000);
+				src = src + ((hardwareRevision == 2) ? 0 : 0x40000);
 				dest = src;
 			}
 		}
@@ -186,13 +184,16 @@ void ext_SSTART(void)
 				if(h) {HeapUnlock(h);h=H_NULL;}	//unlock the ppg mem ASAP
 				
 				len-=2;
-				dest+= (hardwareRevision == 3) ? 2 : 0x40002;
+				dest+= (hardwareRevision == 2) ? 2 : 0x40002;
 			}
 			else//wasnt a ppg either.. therefore we do not know how to handle it.
 				ER_throw(ER_INVALID_VAR_REF);
 		}
 
 
+	//unprotect the area where we want to execute the program...
+		enter_ghost_space(((hardwareRevision == 2) ? dest : (void*)0x3E000));
+		
 		// "APD crash" fix.
 		/* If we are on AMS 2, we have to set the "last executed program" to somewhere
 		in the last 4 KB of RAM, or else APD may crash under certain circumstances.
@@ -202,7 +203,7 @@ void ext_SSTART(void)
 		code and add 8 (12 if long reference) to get the wanted short pointer, which must
 		then be sign-extended to an actual pointer. (The sign extension is implicit in the
 		generated code, as it should be.) */
-		// sstart vs. ttstart: sstart won't run on AMS 1.xx or PedroM -> remove check. (Lionel, I don't quite understand this comment - Greg)
+		// sstart vs. ttstart: sstart does not run on AMS 1.xx or PedroM so the checking for that is not necessary.
 		{
 			char *rb=(char*)(((unsigned long)*(void**)0xC8)&0xE00000);
 
@@ -211,10 +212,10 @@ void ext_SSTART(void)
         
         	while (p<q && *(unsigned long*)p!=0xDEADDEAD) p+=2;
 			p+=2[(short *)p]?8:12;
-			*(void **)(long)*(short *)p=(hardwareRevision == 3) ? dest : (void*)0x3f000;
+			*(void **)(long)*(short *)p=(hardwareRevision == 2) ? dest : (void*)0x3f000;
 		}
-		
-		EX_patch(dest,dest+len-1);		
+				
+		EX_patch(dest,dest+len-1);
 		asm("movem.l d0-d7/a0-a6,-(sp)\n", 4);	//this avoids bugs caused by programs not saving/restoring the registers properly
 		((void(*const)(void))dest)();				//launch!
 		asm(" nop\n nop\n nop\n nop\n nop\n",10);	//a way to ignore/fool the TIGCC return value hack

@@ -93,6 +93,9 @@ typedef struct SSETTINGS{
 
 extern SETTINGS gSettings;
 
+//don't run if the JT_VERSION flag is set... this should be done for all TI-BASIC Extensions!
+	#define JT_VERSION_CHECK()(MY_ACB(pAppObj)->flags&ACB_JT_VERSION)
+
 //#define AutoStartMask(val) ((val&0xFFFF0000)>>16)
 //#define LeakWatchMask(val) (val&0x0000FFFF)
 

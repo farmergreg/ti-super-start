@@ -91,10 +91,6 @@ void HomeHook(pFrame self, PEvent e)
 //Credits to Samuel Stearley for this hack.
 //I (Greg) have converted his ASM code into a C function.
 //Finds the Home Screen Text Editor / Entry Line in an AMS independant manner.
-//
-//Fixed by Lionel Debroux: the hack didn't work on AMS 3.00 because
-//the new AMS uses a longer instruction (which is not necessary; 
-//the shorter version makes more sense) when working with the TE pointer.
 static TERecord *TE_findHomeScreen(void)
 {
 	Access_AMS_Global_Variables;
@@ -103,12 +99,13 @@ static TERecord *TE_findHomeScreen(void)
 	while(*(unsigned long*)a!=(unsigned long)addr_TE_select)
 		a+=2;
 
-    if (((unsigned long *)AMS_Global_Variables)[-1]<0x608) // AMS 1.xx or 2.xx.
+//Technically, the commented lines should be uncommented to properly support ams 3.00 which
+//uses long word references, but because we are scanning backwards, and the variable is located
+//at an address that is less than 0xFFFF, this code still works.
+    //if(EX_getBasecodeParmBlock()->version_number < 0x0300)
 	    return (TERecord*)(unsigned long)(*(unsigned short*)(a-4));
-	else if (((unsigned long *)AMS_Global_Variables)[-1] >= 0x608 || ((BASECODE_PARM_BLOCK const *(* const)(void))AMS_Global_Variables[1498])()->version_number > (((3) << 8) + (0))) // AMS 3.00
-	    return (TERecord*)(unsigned long)(*(unsigned long*)(a-6));
-	else // AMS 3.01+, App is supposed to self_delete on those versions anyway.
-	    return NULL;
+	//else
+	    //return (TERecord*)(unsigned long)(*(unsigned long*)(a-6));
 }
 
 //This does the actual work of the AutoStart feature.
@@ -164,6 +161,9 @@ static void AutoStart(BOOL IgnoreAsmPrgmSize)
 		if((sym=SymFindPtr(ptr,0)))
 		{
 			unsigned short varsize;
+			//the maximum size on AMS < 3.00 is 24 KB. The maximum size on AMS 3.00 is the full 65520 bytes so no launcher is needed with AMS 3.00
+			//64K is larger than is possible, so on ams 3.00 and above, super start will not try to use its internal launcher to launch the program.
+			unsigned short max_var_size = (EX_getBasecodeParmBlock()->version_number < 0x0300) ?(64*1024):(24*1024);
 
 	//designed to avoid errors with any variable that is "in use" or for some other reason has no handle associated with it.
 	//this takes care of problems when launching a ti-basic program that is also being edited.
@@ -174,7 +174,7 @@ static void AutoStart(BOOL IgnoreAsmPrgmSize)
 			varsize=*(unsigned short*)ptr;
 			ptr=&ptr[varsize+1];			//the same as: ptr=(char*)HToESI(sym->hVal);
 			
-			if(!memcmp(PackagedTag,ptr-4,5) || (*(unsigned char*)ptr==ASM_PRGM_TAG && (varsize>(24*1024)||IgnoreAsmPrgmSize) ) )
+			if(!memcmp(PackagedTag,ptr-4,5) || (*(unsigned char*)ptr==ASM_PRGM_TAG && (varsize>( max_var_size )||IgnoreAsmPrgmSize) ) )
 			{						
 				TE_select(hste,0,0);
 	

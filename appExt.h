@@ -31,7 +31,4 @@
 
 	extern const unsigned short gTT_UNPACK[];
 	
-//don't run if the JT_VERSION flag is set... this should be done for all TI-BASIC Extensions!
-	#define JT_VERSION_CHECK()(MY_ACB(pAppObj)->flags&ACB_JT_VERSION)
-	
 #endif
