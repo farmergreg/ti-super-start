@@ -31,6 +31,7 @@
 #include "HWPatch.h"
 #include "Resources.h"
 #include "CommandPostExport.h"
+#include "sstart_export.h"
 
 #ifndef EX_patch
 	#define EX_patch tiamsapi_346
@@ -93,7 +94,7 @@ void ext_SSTART(void)
 	EStackIndex tmp_index;
 	CONTROL_BITS savedctrl;
 	HANDLE cmd_post;
-	ULONG hardwareRevision = FL_getHardwareParmBlock()->hardwareRevision;
+	BOOL isHW3 = (FL_getHardwareParmBlock()->hardwareRevision == 2);
 	
 	if(JT_VERSION_CHECK())	return;	//don't run if the JT_VERSION flag is set... this should be done for all TI-BASIC Extensions!
 	
@@ -157,12 +158,12 @@ void ext_SSTART(void)
 			if(symptr->Flags&SF_EXTMEM)
 			{//located in the archive; a copy is necessary
 				h_alloc=HeapAllocHighThrow(len);
-				dest=((char*)HeapDeref(h_alloc)) + ((hardwareRevision == 2) ? 0 : 0x40000);
+				dest=((char*)HeapDeref(h_alloc)) + ((isHW3) ? 0 : 0x40000);
 				memcpy(dest,src,len);
 			}
 			else
 			{
-				src += ((hardwareRevision == 2) ? 0 : 0x40000);
+				src += ((isHW3) ? 0 : 0x40000);
 				dest = src;
 			}
 		}
@@ -177,14 +178,15 @@ void ext_SSTART(void)
 
 				ST_helpMsg(OO_AbsoluteGet(OO_FIRST_APP_STRING+XR_Decompressing));
 				
-				if(((unsigned short(*const)(char*,char*))gTT_UNPACK)(src,dest))			ER_throw(ER_INVALID_VAR_REF);
+				//if(((unsigned short(*const)(char*,char*))gTT_UNPACK)(src,dest))			ER_throw(ER_INVALID_VAR_REF);
+				if(TT_UNPACK(MY_APP_ID(pAppObj), src, dest))	ER_throw(ER_INVALID_VAR_REF);
 					
 				ST_eraseHelp();
 				
 				if(h) {HeapUnlock(h);h=H_NULL;}	//unlock the ppg mem ASAP
 				
 				len-=2;
-				dest+= (hardwareRevision == 2) ? 2 : 0x40002;
+				dest+= (isHW3) ? 2 : 0x40002;
 			}
 			else//wasnt a ppg either.. therefore we do not know how to handle it.
 				ER_throw(ER_INVALID_VAR_REF);
@@ -208,11 +210,11 @@ void ext_SSTART(void)
         
         	while (p<q && *(unsigned long*)p!=0xDEADDEAD) p+=2;
 			p+=2[(short *)p]?8:12;
-			*(void **)(long)*(short *)p=(hardwareRevision == 2) ? dest : (void*)0x3F000;
+			*(void **)(long)*(short *)p=(isHW3) ? dest : (void*)0x3F000;
 		}
 
 	//unprotect the area where we want to execute the program...
-		enter_ghost_space(((hardwareRevision == 2) ? dest : (void*)0x3E000));
+		enter_ghost_space(((isHW3) ? dest : (void*)0x3E000));
 				
 		EX_patch(dest,dest+len-1);
 		asm("movem.l d0-d7/a0-a6,-(sp)\n", 4);		//this avoids bugs caused by programs not saving/restoring the registers properly
