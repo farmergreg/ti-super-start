@@ -17,5 +17,5 @@ REM del sdk-92p\* /Q
 REM del sdk-89\* /Q
 
 REM Never use this file to open the project. Instead, use the file that corresponds with the target calculator.
-REM del sstart.FSP
+del sstart.FSP
 

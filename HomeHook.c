@@ -83,17 +83,18 @@ void HomeHook(pFrame self, PEvent e)
 			AutoStart(UseLeakWatch() && EV_getAppID(cmd_post_app_id));
 		}
 	}
-	
-	if(super) AppProcessEvent(super, e);	//this is an important piece of code! Otherwise you will see semi-random errors thrown.
+
+//this is an important piece of code! Otherwise you will see semi-random errors thrown by the AMS.	
+	if(super) AppProcessEvent(super, e);
 }
 
 //Credits to Samuel Stearley for this hack.
-//I have converted his ASM code into a C function.
+//I (Greg) have converted his ASM code into a C function.
 //Finds the Home Screen Text Editor / Entry Line in an AMS independant manner.
 //
-//Fixed by Lionel Debroux: hack didn't work on AMS 3.00 because
-//the new AMS uses a longer instruction (which is not necessary)
-//when working with the TE pointer.
+//Fixed by Lionel Debroux: the hack didn't work on AMS 3.00 because
+//the new AMS uses a longer instruction (which is not necessary; 
+//the shorter version makes more sense) when working with the TE pointer.
 static TERecord *TE_findHomeScreen(void)
 {
 	Access_AMS_Global_Variables;

@@ -58,7 +58,7 @@ enum XR_STRINGS {
 //if you are using a resource file, then you cannot use an enum
 //to declare the application XR_strings
 //this is due to limitations of the TIFS resource compiler
-//this information is current as of TIFS Version 1.1 Build 41
+//this information is current as of TIFS Version 1.1 Build 43
 //rather, you must #define each string used in the resource like this:
 
 //this is rather high maintence...

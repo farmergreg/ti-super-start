@@ -198,7 +198,7 @@ void ext_SSTART(void)
 		code and add 8 (12 if long reference) to get the wanted short pointer, which must
 		then be sign-extended to an actual pointer. (The sign extension is implicit in the
 		generated code, as it should be.) */
-		// sstart vs. ttstart: sstart won't run on AMS 1.xx or PedroM -> remove check. (Lionel) - (I don't quite understand this comment - Greg.)
+		// sstart vs. ttstart: sstart won't run on AMS 1.xx or PedroM -> remove check. (Lionel) - (I don't quite understand this comment - Greg)
 		{
 			char *rb=(char*)(((unsigned long)*(void**)0xC8)&0xE00000);
 
