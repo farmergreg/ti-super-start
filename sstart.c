@@ -332,7 +332,7 @@ typedef struct{void*Start,*Pos,*End;short EOFVal;}CFILE;
 
 //yes, this is THE primary event loop! (finally :)
 //not much to it eh? :)
-//Cannot use F-Line ROM_CALLs in most parts of it due to AMS 2.03- support.
+//Cannot use F-Line ROM_CALLs in most parts of it due to AMS 2.00 - 2.03 support.
 static void Event_Handler(pFrame self, PEvent e)
 {
 	Access_AMS_Global_Variables;
@@ -343,29 +343,19 @@ static void Event_Handler(pFrame self, PEvent e)
 	CFILE file;
 
 	
-	//instead of using the CheckAMS macro, i've implemented a different method which allows people to hook Super Start and force it to
-	//run on ams 2.00 through 2.03
+//instead of using the CheckAMS macro, i've implemented a different method which allows people to hook Super Start and force it to
+//run on ams 2.00 through 2.03
 	#define AMSMajorRevisionRequired (2)
 	#define AMSMinorRevisionRequired (4)
-	#define AMSMajorRevisionMax      (3)
-	#define AMSMinorRevisionMax      (0)
 
-	
-	// From _OSVersionOK_=(BOOL)OO_GetAttr(self, OO_AMS_OK);
-	// Nasty eh ?
-	//_OSVersionOK_=(BOOL)(((void *(*)(pFrame,unsigned long))AMS_Global_Variables[0x3FD])(self, OO_AMS_OK));
-	
-	//if(!_OSVersionOK_)
-	//{
-
-	// Address of F-Line instructions handler.
+// Address of F-Line instructions handler.
 	F_LINE_HANDLER_ADDRESS = *(void **)0x2C;
 
-	// Cannot work on AMS 2.03- if there is no custom F-Line handler (which we always check here).
-	// Tests:
-	// * number of ROM_CALLs high enough to use EX_getBasecodeParmBlock;
-	// * AMS version < 2.04 (using EX_getBasecodeParmBlock).
-	// * F-Line instructions handler being located in AMS itself.
+// Cannot work on AMS 2.03- if there is no custom F-Line handler (which we always check here).
+// Tests:
+// * number of ROM_CALLs high enough to use EX_getBasecodeParmBlock;
+// * AMS version < 2.04 (using EX_getBasecodeParmBlock).
+// * F-Line instructions handler being located in AMS itself.
 	if (   (   ((long const *)AMS_Global_Variables)[-1] < 1499 
 	        || ((BASECODE_PARM_BLOCK const *(* const)(void))AMS_Global_Variables[1498])()->version_number < (((AMSMajorRevisionRequired) << 8) + (AMSMinorRevisionRequired))) // EX_getBasecodeParmBlock.
 		&& (   (F_LINE_HANDLER_ADDRESS >= (void*)CertificateMemory) 
@@ -374,22 +364,8 @@ static void Event_Handler(pFrame self, PEvent e)
 		MY_ACB(pAppObj)->flags|=(ACB_JT_VERSION);
 		return;
 	}
-	// Cannot work for sure on AMS 3.01+ because of an unsafe hack to get the home screen TERecord in
-	// HomeHook.c (we cannot do without this hack, since what we want is not exported in the jump table).
-	// Therefore, self-delete !
-	if (((long const *)AMS_Global_Variables)[-1] >= 0x608 || ((BASECODE_PARM_BLOCK const *(* const)(void))AMS_Global_Variables[1498])()->version_number > (((AMSMajorRevisionMax) << 8) + (AMSMinorRevisionMax)))  // EX_getBasecodeParmBlock.
-	{
-		MY_ACB(pAppObj)->flags|=(ACB_JT_VERSION|ACB_DELETE);
-		return;
-	}
-	// If we come here, we have an AMS between 2.04 and 3.00: we can therefore use F-Line ROM_CALLs.
-	//else
-	//{
-		//OO_SetAttr(self, OO_AMS_OK, (void*)TRUE);
-		//(((short(*)(pFrame,unsigned long,void*))AMS_Global_Variables[0x401])(self, OO_AMS_OK, (void*)TRUE));
-	//}
-	//}
-   
+
+// If we come here, we have an AMS version that supports FLINE ROM Calls 
 	switch (e->command)
 	{
 		case CM_INSTALL:
@@ -458,7 +434,7 @@ static void DoFormatsDialog(void)
 BOOL cbFormatsDialog(WORD dlgId, DWORD dValue)
 {
 	if(dlgId==DB_QACTIVE && dValue==1)
-		return EV_getAppID(cmd_post_app_id);	//disable the option if Command Post is not installed
+		return EV_getAppID(cmd_post_app_id);	//disable the option if Command Post (Plus) is not installed
 
 	return TRUE;
 }
