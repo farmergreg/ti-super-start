@@ -79,7 +79,8 @@ enum XR_STRINGS {
 
 
 //Application Defined TI-Basic Extensions
-//Keep in ABC order or there will be problems.	
+//Keep in ABC order (keep in mind the difference between 'A' and 'a' too)
+// or there will be problems.	
 enum
 {
     EXT_ABOUT,

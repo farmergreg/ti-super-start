@@ -91,7 +91,9 @@ void HomeHook(pFrame self, PEvent e)
 //I have converted his ASM code into a C function.
 //Finds the Home Screen Text Editor / Entry Line in an AMS independant manner.
 //
-//Fixed by Lionel Debroux: hack didn't work on terribly pessimized AMS 3.00...
+//Fixed by Lionel Debroux: hack didn't work on AMS 3.00 because
+//the new AMS uses a longer instruction (which is not necessary)
+//when working with the TE pointer.
 static TERecord *TE_findHomeScreen(void)
 {
 	Access_AMS_Global_Variables;
@@ -109,7 +111,7 @@ static TERecord *TE_findHomeScreen(void)
 }
 
 //This does the actual work of the AutoStart feature.
-//It finds the home screen text editor and processs it... and
+//It finds the home screen text editor, processs it... and
 //prepares for the os to handle the *+KB_ENTER
 static void AutoStart(BOOL IgnoreAsmPrgmSize)
 {
@@ -130,7 +132,8 @@ static void AutoStart(BOOL IgnoreAsmPrgmSize)
 	//////////////////////////////////////////
 	//begin check for function, prgm, asm, ppg programs
 		//Check if the home screen text edit line isn't active so don't peform the Auto Start		
-		//check the max length of an program with a path associated with it
+		//check the max length of an program with a path associated with it (yes, this feature only
+		//works when the program name is the only text on the entry line).
 		if(!(hste->flags&TE_FOCUSED) || hste->datlen>19 ) return;
 	
 	//just converting it to a TIOS style file name...

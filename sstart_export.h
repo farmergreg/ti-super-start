@@ -34,7 +34,7 @@
 ((unsigned short(*const)(char*,char*))OO_GetAppAttr(obj,OO_FIRST_APP_ATTR + 0))(src,dest)
                
 /*
-	See the documentation for the FDL compiler (ghost ware) to learn how to use these functions in a project
+	See the documentation for the FDL compiler (ghostware) to learn how to use these functions in a project
 
   casting a pointer to a function is simple:
   ((return_type (* const)(parameter_1_type, parameter_2_type, ...))

@@ -106,7 +106,7 @@ STRING_FRAME(appObj, OO_SYSTEM_FRAME, &appObjMain, OO_FIRST_STRING + OO_FIRST_AP
 	
 //Application Strings   
 	"Super Start v" APP_VERSION,	//XR_LongAppName
-	"Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2003\nBy: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org",	//XR_About_Me
+	"Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2004\nBy: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org",	//XR_About_Me
 	"You cannot delete Super Start while the Auto Start feature is turned on and the Home Screen is active! Either turn off Auto Start, or switch to another application such as Y=",					//XR_Fail_HS_Active
 	"sstart.",						//XR_SSTART_EXT			this string must be consistent with the OO_APP_TOK_NAME frame entry
 	"sstart(\"",					//XR_SSTART_MINIMAL		this string must be consistent with the OO_APP_TOK_NAME frame entry
@@ -134,7 +134,7 @@ STRING_FRAME(appSpanish, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRI
  
 //Application Strings   
  "Super Start v" APP_VERSION,										//XR_LongAppName
- "Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2003\nPor: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org", //XR_About_Me  it is almost the same line
+ "Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2004\nPor: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org", //XR_About_Me  it is almost the same line
  "No puede borrar a Super Start mientras la opción de Auto Arranque esta activada 'ON' y se esta en la pantalla Home! Para hacerlo, desactive el Auto Arranque 'OFF', o Cambie a otra aplicacion tal como Y=",     //XR_Fail_HS_Active
  "sstart.",															//XR_SSTART_EXT   this string must be consistent with the OO_APP_TOK_NAME frame entry
  "sstart(\"",														//XR_SSTART_MINIMAL  this string must be consistent with the OO_APP_TOK_NAME frame entry
@@ -162,7 +162,7 @@ STRING_FRAME(appDutch, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRING
     
 //Application Strings    
    "Super Start v" APP_VERSION,   //XR_LongAppName DNT 
-   "Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2003\nDoor: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org",   //XR_About_Me 
+   "Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2004\nDoor: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org",   //XR_About_Me 
    "Je kunt Super Start niet verwijderen zolang de Auto Start functie aan staat en het Home Screen actief is! Schakel Auto Start uit, of ga naar een andere applicatie, zoals Y=",               //XR_Fail_HS_Active 
    "sstart.",                  //XR_SSTART_EXT         this string must be consistent with the OO_APP_TOK_NAME frame entry DNT 
    "sstart(\"",               //XR_SSTART_MINIMAL      this string must be consistent with the OO_APP_TOK_NAME frame entry DNT 
@@ -190,7 +190,7 @@ STRING_FRAME(appSwedish, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRI
 
 //Application Strings  
 "Super Start v" APP_VERSION, //XR_LongAppName DNT 
-"Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2003\nAv: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org", //XR_About_Me 
+"Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2004\nAv: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org", //XR_About_Me 
 "Du kan inte radera Super Start medan Auto Start är på och du har grundfönstret framme! Stäng antingen av Auto Start eller byt till ett annat fönster som Y= editorn", //XR_Fail_HS_Active 
 "sstart.", //XR_SSTART_EXT this string must be consistent with the OO_APP_TOK_NAME frame entry DNT 
 "sstart(\"", //XR_SSTART_MINIMAL this string must be consistent with the OO_APP_TOK_NAME frame entry DNT 
@@ -219,7 +219,7 @@ STRING_FRAME(appGerman, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRIN
     
 //Application Strings    
    "Super Start V" APP_VERSION,   //XR_LongAppName DNT 
-   "Super Start V" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2003\nVon: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org",   //XR_About_Me 
+   "Super Start V" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2004\nVon: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org",   //XR_About_Me 
    "Sie können Super Start nicht löschen, solange die Auto-Start-Funktion eingeschalten und der Home Screen aktiv ist! Deaktivieren Sie Auto Start, oder schalten Sie zu einer anderen Applikation, wie etwa Y=, um.",               //XR_Fail_HS_Active 
    "sstart.",                  //XR_SSTART_EXT         this string must be consistent with the OO_APP_TOK_NAME frame entry DNT 
    "sstart(\"",               //XR_SSTART_MINIMAL      this string must be consistent with the OO_APP_TOK_NAME frame entry DNT 
@@ -248,7 +248,7 @@ STRING_FRAME(appFrench, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRIN
     
 //Application Strings 
    "Super Start v" APP_VERSION,   //XR_LongAppName DNT 
-   "Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2003\nPar: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org",   //XR_About_Me 
+   "Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2004\nPar: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\nhttp://calc.gregd.org",   //XR_About_Me 
    "Vous ne pouvez pas effacer Super Start tant que la fonction Démarrage Automatique est activée et l'écran Home est actif! Désactivez le Démarrage Automatique ou passez à une autre application, comme par exemple Y=.",
    "sstart.",                  //XR_SSTART_EXT         this string must be consistent with the OO_APP_TOK_NAME frame entry DNT
    "sstart(\"",               //XR_SSTART_MINIMAL      this string must be consistent with the OO_APP_TOK_NAME frame entry DNT 
@@ -277,7 +277,7 @@ STRING_FRAME(appItalian, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRI
     
 //Application Strings     
    "Super Start v" APP_VERSION,   //XR_LongAppName DNT 
-   "Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2003\nDi: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\n calc.gregd.org",    //XR_About_Me 
+   "Super Start v" APP_VERSION "\n\nCopyright " RF_COPYRIGHT " 2004\nDi: Gregory L. Dietsche\nEmail: calc@gregd.org\n\nGForce Programming:\n calc.gregd.org",    //XR_About_Me 
    "Super Start non può essere cancellata mentre la funzione Esecuzione Automatica è abilitata e lo schermo Home è attivo! Devi disabilitare l'Esecuzione Automatica, oppure passare ad un'altra applicazione, per esempio Y=.",
    "sstart.",                  //XR_SSTART_EXT         this string must be consistent with the OO_APP_TOK_NAME frame entry DNT 
    "sstart(\"",               //XR_SSTART_MINIMAL      this string must be consistent with the OO_APP_TOK_NAME frame entry DNT 
@@ -350,8 +350,6 @@ static void Event_Handler(pFrame self, PEvent e)
 	#define AMSMajorRevisionMax      (3)
 	#define AMSMinorRevisionMax      (0)
 
-	
-	
 	
 	// From _OSVersionOK_=(BOOL)OO_GetAttr(self, OO_AMS_OK);
 	// Nasty eh ?
