@@ -158,12 +158,12 @@ void ext_SSTART(void)
 			if(symptr->Flags&SF_EXTMEM)
 			{//located in the archive; a copy is necessary
 				h_alloc=HeapAllocHighThrow(len);
-				dest=((char*)HeapDeref(h_alloc)) + ((isHW3) ? 0 : 0x40000);
+				dest=((char*)HeapDeref(h_alloc)) + (isHW3 ? 0 : 0x40000);
 				memcpy(dest,src,len);
 			}
 			else
 			{
-				src += ((isHW3) ? 0 : 0x40000);
+				src += (isHW3 ? 0 : 0x40000);
 				dest = src;
 			}
 		}
@@ -178,7 +178,6 @@ void ext_SSTART(void)
 
 				ST_helpMsg(OO_AbsoluteGet(OO_FIRST_APP_STRING+XR_Decompressing));
 				
-				//if(((unsigned short(*const)(char*,char*))gTT_UNPACK)(src,dest))			ER_throw(ER_INVALID_VAR_REF);
 				if(TT_UNPACK(MY_APP_ID(pAppObj), src, dest))	ER_throw(ER_INVALID_VAR_REF);
 					
 				ST_eraseHelp();
@@ -186,7 +185,7 @@ void ext_SSTART(void)
 				if(h) {HeapUnlock(h);h=H_NULL;}	//unlock the ppg mem ASAP
 				
 				len-=2;
-				dest+= (isHW3) ? 2 : 0x40002;
+				dest+= isHW3 ? 2 : 0x40002;
 			}
 			else//wasnt a ppg either.. therefore we do not know how to handle it.
 				ER_throw(ER_INVALID_VAR_REF);
@@ -210,11 +209,11 @@ void ext_SSTART(void)
         
         	while (p<q && *(unsigned long*)p!=0xDEADDEAD) p+=2;
 			p+=2[(short *)p]?8:12;
-			*(void **)(long)*(short *)p=(isHW3) ? dest : (void*)0x3F000;
+			*(void **)(long)*(short *)p=isHW3 ? dest : (void*)0x3F000;
 		}
 
 	//unprotect the area where we want to execute the program...
-		enter_ghost_space(((isHW3) ? dest : (void*)0x3E000));
+		enter_ghost_space(isHW3 ? dest : (void*)0x3E000);
 				
 		EX_patch(dest,dest+len-1);
 		asm("movem.l d0-d7/a0-a6,-(sp)\n", 4);		//this avoids bugs caused by programs not saving/restoring the registers properly
