@@ -2,8 +2,8 @@
 ***	Project Title: Super Start (sstart)			***
 ***	Author: Greg Dietsche						***
 ***	Date:	11/21/2002							***
-*** Platforms:	TI-89, TI-92p, V200				***
-*** Supported Hardware Revisions: 1, 2			***
+*** Platforms:	TI-89, TI89T, TI-92p, V200		***
+*** Supported Hardware Revisions: 1, 2, 3		***
 ***	Description: An Application designed to		***
 *** 			 Simplify the launching of ppg	***
 ***				 programs as well as normal		***
@@ -26,7 +26,7 @@
 #define _SUPERSTART_H_
 
 //Version Control and Internal/External App Name
-#define APP_VERSION "1.20"
+#define APP_VERSION "1.30"
 #define APP_INTERNAL "sstart"
 
 //#define DEBUG			//enable extra debugging code
@@ -50,6 +50,7 @@
 	#define C(x,y)(y)
 #endif
 
+/*
 //My own debuged replacment for TI's OS_NeedMinimumVersion macro
 //This Macro will mark the application for immediate removal if
 //the AMS version is too low.
@@ -69,6 +70,7 @@
          _OSVersionOK_ = TRUE;										\
    }																\
 }
+*/
       
 //This header requires certain other header files
 #include "xr.h"		//technically part of this header file; isolated for ease of editing

@@ -2,8 +2,8 @@
 ***	Project Title: Super Start (sstart)			***
 ***	Author: Greg Dietsche						***
 ***	Date:	11/21/2002							***
-*** Platforms:	TI-89, TI-92p, V200				***
-*** Supported Hardware Revisions: 1, 2			***
+*** Platforms:	TI-89, TI89T, TI-92p, V200		***
+*** Supported Hardware Revisions: 1, 2, 3		***
 ***	Description: An Application designed to		***
 *** 			 Simplify the launching of ppg	***
 ***				 programs as well as normal		***
@@ -25,7 +25,7 @@
 #include <tiams.h>
 #include "HWPatch.h"
 
-#define addr_EX_stoBCD ((char *)AMS_Global_Variables[0xC0])
+//#define addr_EX_stoBCD ((char *)AMS_Global_Variables[0xC0])
 
 /*
 BOOL h220xtsrInstalled(void)
@@ -61,17 +61,16 @@ Access_AMS_Global_Variables;
 */
 
 //thanks to ExtendeD for this ;)
-void enter_ghost_space(void)
-{
-	asm(
-	" movem.l a3/d3/d7,-(sp)\n"
-	" movea.l #0x3E000,a3\n"
-	" move.l (0xC8).w,-(a7)\n"	
-	" lea  -0x10(a7),a7\n"
-	" moveq #0xF,d3\n"
-	" trap #11\n"
-	" lea 0x14(a7),a7\n"
-	" movem.l (sp)+,a3/d3/d7\n", 
-	30); //it doesn't really matter if we get the exact length of the asm
+void enter_ghost_space(void * address) {
+asm(
+	" movem.l  a3/d3/d7,-(sp)\n" // 4
+	" movea.l  16(sp),a3\n" // 4
+	" move.l   (0xC8).w,-(a7)\n"	// 4
+	" lea      -0x10(a7),a7\n" // 4
+	" moveq    #0xF,d3\n" // 2
+	" trap     #11\n" // 2
+	" lea      0x14(a7),a7\n" // 4
+	" movem.l  (sp)+,a3/d3/d7\n", // 4
+	28); //it doesn't really matter if we get the exact length of the asm
 		//instruction correct - but make sure the given length is >= the actual length
 }

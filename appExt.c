@@ -2,8 +2,8 @@
 ***	Project Title: Super Start (sstart)			***
 ***	Author: Greg Dietsche						***
 ***	Date:	11/21/2002							***
-*** Platforms:	TI-89, TI-92p, V200				***
-*** Supported Hardware Revisions: 1, 2			***
+*** Platforms:	TI-89, TI-89T, TI-92p, V200		***
+*** Supported Hardware Revisions: 1, 2, 3		***
 ***	Description: An Application designed to		***
 *** 			 Simplify the launching of ppg	***
 ***				 programs as well as normal		***
@@ -88,6 +88,7 @@ void ext_SSTART(void)
 	EStackIndex tmp_index;
 	CONTROL_BITS savedctrl;
 	HANDLE cmd_post;
+	ULONG hardwareRevision = FL_getHardwareParmBlock()->hardwareRevision;
 	
 	if(JT_VERSION_CHECK())	return;	//don't run if the JT_VERSION flag is set... this should be done for all TI-BASIC Extensions!
 	
@@ -96,7 +97,7 @@ void ext_SSTART(void)
 		LeakWatch_begin(cmd_post);
 	}
 
-	enter_ghost_space();
+	enter_ghost_space(((hardwareRevision == 3) ? (void*)HeapDeref(h) : (void*)0x3E000));
 	
 	savedctrl=NG_control;
 	SET_SIDE_EFFECTS_PERMITTED;
@@ -153,12 +154,13 @@ void ext_SSTART(void)
 			if(symptr->Flags&SF_EXTMEM)
 			{//located in the archive; a copy is necessary
 				h_alloc=HeapAllocHighThrow(len);
-				dest=((char*)HeapDeref(h_alloc)) + 0x40000;
+				dest=((char*)HeapDeref(h_alloc)) + ((hardwareRevision == 3) ? 0 : 0x40000);
 				memcpy(dest,src,len);
 			}
 			else
 			{
-				dest=src=(src+0x40000);
+				src = src + ((hardwareRevision == 3) ? 0 : 0x40000);
+				dest = src;
 			}
 		}
 		else
@@ -176,19 +178,43 @@ void ext_SSTART(void)
 					
 				ST_eraseHelp();
 				
-				if(h){HeapUnlock(h);h=H_NULL;}	//unlock the ppg mem ASAP
+				if(h) {HeapUnlock(h);h=H_NULL;}	//unlock the ppg mem ASAP
 				
 				len-=2;
-				dest+=0x40002;
+				dest+= (hardwareRevision == 3) ? 2 : 0x40002;
 			}
 			else//wasnt a ppg either.. therefore we do not know how to handle it.
 				ER_throw(ER_INVALID_VAR_REF);
+		}
+
+
+		// "APD crash" fix.
+		/* If we are on AMS 2, we have to set the "last executed program" to somewhere
+		in the last 4 KB of RAM, or else APD may crash under certain circumstances.
+		The code below looks for the "last executed program" variable. That variable
+		is cleared during initialization, immediately after the stack fence is set up.
+		So we look for the value of the stack fence (0xDEADDEAD) in the initialization
+		code and add 8 (12 if long reference) to get the wanted short pointer, which must
+		then be sign-extended to an actual pointer. (The sign extension is implicit in the
+		generated code, as it should be.) */
+		// sstart vs. ttstart: sstart won't run on AMS 1.xx or PedroM -> remove check.
+		
+		// NOTE: if these brackets are not present, build fails with syntax errors (TIFS 1.0 Beta 26) !
+		{
+			char *rb=(char*)(((unsigned long)*(void**)0xC8)&0xE00000);
+
+			char *p=rb+0x12000;
+			char *q=rb+0x18000;
+        
+        	while (p<q && *(unsigned long*)p!=0xDEADDEAD) p+=2;
+			p+=2[(short *)p]?8:12;
+			*(void **)(long)*(short *)p=(void*)((hardwareRevision == 3) ? dest : 0x3f000);
 		}
 		
 		EX_patch(dest,dest+len-1);		
 		asm("movem.l d0-d7/a0-a6,-(sp)\n", 4);	//this avoids bugs caused by programs not saving/restoring the registers properly
 		((void(*const)(void))dest)();				//launch!
-		asm(" nop\n nop\n nop\n nop\n nop\n",14);	//a way to ignore/fool the TIGCC return value hack
+		asm(" nop\n nop\n nop\n nop\n nop\n",10);	//a way to ignore/fool the TIGCC return value hack
 		asm(" movem.l (sp)+,d0-d7/a0-a6\n",4);  //this avoids bugs caused by programs not saving/restoring the registers properly
 
 			#ifdef DEBUG

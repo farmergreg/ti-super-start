@@ -2,8 +2,8 @@
 ***	Project Title: Super Start (sstart)			***
 ***	Author: Greg Dietsche						***
 ***	Date:	11/21/2002							***
-*** Platforms:	TI-89, TI-92p, V200				***
-*** Supported Hardware Revisions: 1, 2			***
+*** Platforms:	TI-89, TI89T, TI-92p, V200		***
+*** Supported Hardware Revisions: 1, 2, 3		***
 ***	Description: An Application designed to		***
 *** 			 Simplify the launching of ppg	***
 ***				 programs as well as normal		***
@@ -89,6 +89,8 @@ void HomeHook(pFrame self, PEvent e)
 //Credits to Samuel Stearley for this hack.
 //I have converted his ASM code into a C function.
 //Finds the Home Screen Text Editor / Entry Line in an AMS independant manner.
+//
+//Fixed by Lionel Debroux: hack didn't work on terribly pessimized AMS 3.00...
 static TERecord *TE_findHomeScreen(void)
 {
 	Access_AMS_Global_Variables;
@@ -97,7 +99,12 @@ static TERecord *TE_findHomeScreen(void)
 	while(*(unsigned long*)a!=(unsigned long)addr_TE_select)
 		a+=2;
 
-	return (TERecord*)(unsigned long)(*(unsigned short*)(a-4));
+    if (((unsigned long *)AMS_Global_Variables)[-1]<0x608) // AMS 1.xx or 2.xx.
+	    return (TERecord*)(unsigned long)(*(unsigned short*)(a-4));
+	else if (((unsigned long *)AMS_Global_Variables)[-1] >= 0x608 || ((BASECODE_PARM_BLOCK const *(* const)(void))AMS_Global_Variables[1498])()->version_number > (((3) << 8) + (0))) // AMS 3.00
+	    return (TERecord*)(unsigned long)(*(unsigned long*)(a-6));
+	else // AMS 3.01+, App is supposed to self_delete on those versions anyway.
+	    return NULL;
 }
 
 //This does the actual work of the AutoStart feature.
@@ -105,17 +112,20 @@ static TERecord *TE_findHomeScreen(void)
 //prepares for the os to handle the *+KB_ENTER
 static void AutoStart(BOOL IgnoreAsmPrgmSize)
 {
-	TERecord *hste=TE_findHomeScreen();
+	TERecord *hste;
 	char tmp[30];		//1 8 1 8 1 ()
 	char *ptr;
 	char *ptr2;
 	SYM_ENTRY *sym;
-	const char PackagedTag[]={'p','p','g',0,0xF8};
-	const char * const text[]={"()","\")" };
-	char *HomeText=HeapDeref(hste->b.hBuf);
+	static const char PackagedTag[]={'p','p','g',0,0xF8};
+	static const char * const text[]={"()","\")" };
+	char *HomeText;
 	int i;
 	unsigned char ParenCount=1;
-	
+
+    hste = TE_findHomeScreen();
+    if (!hste) return;
+    HomeText=HeapDeref(hste->b.hBuf);
 	//////////////////////////////////////////
 	//begin check for function, prgm, asm, ppg programs
 		//Check if the home screen text edit line isn't active so don't peform the Auto Start		

@@ -2,8 +2,8 @@
 ***	Project Title: Super Start (sstart)			***
 ***	Author: Greg Dietsche						***
 ***	Date:	11/21/2002							***
-*** Platforms:	TI-89, TI-92p, V200				***
-*** Supported Hardware Revisions: 1, 2			***
+*** Platforms:	TI-89, TI89T, TI-92p, V200		***
+*** Supported Hardware Revisions: 1, 2, 3		***
 ***	Description: An Application designed to		***
 *** 			 Simplify the launching of ppg	***
 ***				 programs as well as normal		***

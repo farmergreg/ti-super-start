@@ -2,8 +2,8 @@
 ***	Project Title: Super Start (sstart)			***
 ***	Author: Greg Dietsche						***
 ***	Date:	11/21/2002							***
-*** Platforms:	TI-89, TI-92p, V200				***
-*** Supported Hardware Revisions: 1, 2			***
+*** Platforms:	TI-89, TI89T, TI-92p, V200		***
+*** Supported Hardware Revisions: 1, 2, 3		***
 ***	Description: An Application designed to		***
 *** 			 Simplify the launching of ppg	***
 ***				 programs as well as normal		***
@@ -72,7 +72,7 @@ FRAME(appObjMain, OO_SYSTEM_FRAME, 0, OO_APP_FLAGS, FRAME_SIZE)
 		
 //App Data Interface      
 	ATTR(OO_TTUNPACK,					gTT_UNPACK)						//0x10000
-	ATTR(OO_AMS_OK,						FALSE)							//0x10001		This is a special hook which allows Super Start to run on AMS 2.00 - 2.04 if this attribute has a value
+//	ATTR(OO_AMS_OK,						FALSE)							//0x10001		This is a special hook which allows Super Start to run on AMS 2.00 - 2.04 if this attribute has a value
     
 ENDFRAME
 
@@ -326,38 +326,71 @@ const UCHAR ti_home[]="TIHOME";
 //The dialog options...
 SETTINGS gSettings;
 
+//typedef struct{unsigned short Field;unsigned short HdrLen;unsigned long Len;void*Data;}CERT_FIELD;
+typedef struct{void*Start,*Pos,*End;short EOFVal;}CFILE;
+
 //yes, this is THE primary event loop! (finally :)
 //not much to it eh? :)
+//Cannot use F-Line ROM_CALLs in most parts of it due to AMS 2.03- support.
 static void Event_Handler(pFrame self, PEvent e)
 {
 	Access_AMS_Global_Variables;
 	SETTINGS *g=&gSettings;
 	ULONG tmp_val;
+	BOOL _OSVersionOK_;
+	void * F_LINE_HANDLER_ADDRESS;
+	CFILE file;
+
 	
 	//instead of using the CheckAMS macro, i've implemented a different method which allows people to hook Super Start and force it to
 	//run on ams 2.00 through 2.03
-	//CheckAMS(pAppObj, 2, 4);		//Prevent Super Start from running on old AMS versions that do not have a special Line 1111 Emulator
 	#define AMSMajorRevisionRequired (2)
 	#define AMSMinorRevisionRequired (4)
+	#define AMSMajorRevisionMax      (3)
+	#define AMSMinorRevisionMax      (0)
+
 	
-	BOOL _OSVersionOK_;
 	
-	_OSVersionOK_=(BOOL)OO_GetAttr(self, OO_AMS_OK);
 	
-	if(!_OSVersionOK_)
+	// From _OSVersionOK_=(BOOL)OO_GetAttr(self, OO_AMS_OK);
+	// Nasty eh ?
+	//_OSVersionOK_=(BOOL)(((void *(*)(pFrame,unsigned long))AMS_Global_Variables[0x3FD])(self, OO_AMS_OK));
+	
+	//if(!_OSVersionOK_)
+	//{
+
+	// Address of F-Line instructions handler.
+	F_LINE_HANDLER_ADDRESS = *(void **)0x2C;
+
+	// Cannot work on AMS 2.03- if there is no custom F-Line handler (which we always check here).
+	// Tests:
+	// * number of ROM_CALLs high enough to use EX_getBasecodeParmBlock;
+	// * AMS version < 2.04 (using EX_getBasecodeParmBlock).
+	// * F-Line instructions handler being located in AMS itself.
+	if (   (   ((long const *)AMS_Global_Variables)[-1] < 1499 
+	        || ((BASECODE_PARM_BLOCK const *(* const)(void))AMS_Global_Variables[1498])()->version_number < (((AMSMajorRevisionRequired) << 8) + (AMSMinorRevisionRequired))) // EX_getBasecodeParmBlock.
+		&& (   (F_LINE_HANDLER_ADDRESS >= (void*)CertificateMemory) 
+		    && (F_LINE_HANDLER_ADDRESS < ((void *(*)(CFILE*))AMS_Global_Variables[0x4F3])(&file)))) // 'OO_GetFirstFlashAppSectorAddress'.
 	{
-		if (((long const *)AMS_Global_Variables)[-1] < 1499 || ((BASECODE_PARM_BLOCK const *(* const)(void))AMS_Global_Variables[1498])()->version_number< (((AMSMajorRevisionRequired) << 8) + (AMSMinorRevisionRequired)))
-		{
-			MY_ACB(pAppObj)->flags|=(ACB_JT_VERSION);
-			return;
-		}
-		else
-		{
-			OO_SetAttr(self, OO_AMS_OK, (void*)TRUE);
-		}
+		MY_ACB(pAppObj)->flags|=(ACB_JT_VERSION);
+		return;
 	}
+	// Cannot work for sure on AMS 3.01+ because of an unsafe hack to get the home screen TERecord in
+	// HomeHook.c (we cannot do without this hack, since what we want is not exported in the jump table).
+	// Therefore, self-delete !
+	if (((long const *)AMS_Global_Variables)[-1] >= 0x608 || ((BASECODE_PARM_BLOCK const *(* const)(void))AMS_Global_Variables[1498])()->version_number > (((AMSMajorRevisionMax) << 8) + (AMSMinorRevisionMax)))  // EX_getBasecodeParmBlock.
+	{
+		MY_ACB(pAppObj)->flags|=(ACB_JT_VERSION|ACB_DELETE);
+		return;
+	}
+	// If we come here, we have an AMS between 2.04 and 3.00: we can therefore use F-Line ROM_CALLs.
+	//else
+	//{
+		//OO_SetAttr(self, OO_AMS_OK, (void*)TRUE);
+		//(((short(*)(pFrame,unsigned long,void*))AMS_Global_Variables[0x401])(self, OO_AMS_OK, (void*)TRUE));
+	//}
+	//}
    
-	
 	switch (e->command)
 	{
 		case CM_INSTALL:
