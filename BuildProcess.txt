@@ -1,0 +1,15 @@
+These Instructions apply to TI Flash Studio Version 1.1 Build 37
+
+To Build sstart:
+1. always run clean.bat before opening a .fsp file
+2. Open either sstart89.FSP or sstart92p.FSP
+3. Change build type from Debug to Release in the IDE
+4. Press F7 (Build)
+5. Repeat Steps 1 through 4 for the remaining .FSP file.
+
+OR
+(this method is untested)
+1. Run Package.bat
+2. Open the folder sstart89 or sstart92+
+3. always run clean.bat in opened folder before opening the .fsp file
+4. Open The project, and compile in release mode
