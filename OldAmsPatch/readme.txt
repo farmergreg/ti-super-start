@@ -1,3 +1,5 @@
+// $Id$
+
 This is an advanced patch which allows super start to run on ams 2.00 - 2.03.
 
 Steps:

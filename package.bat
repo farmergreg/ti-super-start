@@ -1,3 +1,4 @@
+:: $Id$
 echo off
 call clean
 del sstart89\* /Q

@@ -1,3 +1,5 @@
+$Id$
+
 These Instructions apply to TI Flash Studio Version 1.1 Builds 37 through 42
 
 To Build sstart:

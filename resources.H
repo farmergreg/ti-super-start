@@ -1,3 +1,4 @@
+// $Id$
 #ifndef resources_H
 #define resources_H
 /*  Resource Header File for: resources.r */

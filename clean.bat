@@ -1,3 +1,4 @@
+:: $Id$
 del *.app
 del *.lst
 del *.l

@@ -9,6 +9,7 @@
 ***				 programs as well as normal		***
 ***				 asm and TI-BASIC programs		***
 ***************************************************/
+// $Id$
 /*
     This file is part of Super Start.
 
