@@ -32,9 +32,13 @@
 #include "Resources.h"
 #include "CommandPostExport.h"
 
-#define EX_patch tiamsapi_346
-void tiamsapi_346(char *base_addr, char *tag_ptr);
+#ifndef EX_patch
+	#define EX_patch tiamsapi_346
+	void tiamsapi_346(char *base_addr, char *tag_ptr);
+#endif
 
+//This is a highly optimized version of ttunpack; unfortunately, 
+//the source code used to generate this array was lost.
 const unsigned short gTT_UNPACK[392] = { 
 0x206f,0x0004,0x226f,0x0008,0x48e7,0x010c,0x303c,0x0200,0x4e41,0x3f00,
 0x6100,0x0010,0x3200,0x301f,0x4e41,0x3001,0x4cdf,0x3080,0x4e75,0x4e56,
@@ -198,7 +202,7 @@ void ext_SSTART(void)
 		code and add 8 (12 if long reference) to get the wanted short pointer, which must
 		then be sign-extended to an actual pointer. (The sign extension is implicit in the
 		generated code, as it should be.) */
-		// sstart vs. ttstart: sstart won't run on AMS 1.xx or PedroM -> remove check. (Lionel) - (I don't quite understand this comment - Greg)
+		// sstart vs. ttstart: sstart won't run on AMS 1.xx or PedroM -> remove check. (Lionel, I don't quite understand this comment - Greg)
 		{
 			char *rb=(char*)(((unsigned long)*(void**)0xC8)&0xE00000);
 
@@ -218,10 +222,10 @@ void ext_SSTART(void)
 
 			#ifdef DEBUG
 			{
-			char buff[100];
-			sprintf(buff,"0x%lx 0x%lx",top_estack,tmp_index);
-			ST_helpMsg(buff);
-			ngetchx();
+				char buff[100];
+				sprintf(buff,"0x%lx 0x%lx",top_estack,tmp_index);
+				ST_helpMsg(buff);
+				ngetchx();
 			}
 			#endif
 			
@@ -243,8 +247,7 @@ void ext_SSTART(void)
 		if(UseLeakWatch() && (cmd_post=EV_getAppID(cmd_post_app_id)))
 		{
 			LeakWatch_end(cmd_post, OO_AbsoluteGet(OO_FIRST_APP_STRING+XR_LeakWatchTitle));
-		}
-			
+		}			
 	ENDFINAL		
 }
 
