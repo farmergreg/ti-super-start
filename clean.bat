@@ -11,7 +11,7 @@ del *.s
 del *r1.h
 
 REM sometimes, it is useful to comment/uncomment out the rest of these
-del *.fso
-del sdk-92p\* /Q
-del sdk-89\* /Q
+REM del *.fso
+REM del sdk-92p\* /Q
+REM del sdk-89\* /Q
 

@@ -7,7 +7,7 @@
 ***	Description: An Application designed to		***
 *** 			 Simplify the launching of ppg	***
 ***				 programs as well as normal		***
-***				 asm programs					***
+***				 asm and TI-BASIC programs		***
 ***************************************************/
 /*
     This file is part of Super Start.
@@ -15,17 +15,18 @@
     Super Start is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-    
-    You may use portions of this source code for your own projects
-    if you give me credit and a link to my website: http://calc.gregd.org/
+
+	You may use portions of the Super Start source code for your own projects
+	if you give me credit and a link to my website: http://calc.gregd.org/ 
+	in the project source code and documentation.
     
 */
 
-#ifndef _ROBOCALC_H_
-#define _ROBOCALC_H_
+#ifndef _SUPERSTART_H_
+#define _SUPERSTART_H_
 
 //Version Control and Internal/External App Name
-#define APP_VERSION "1.10"
+#define APP_VERSION "1.20"
 #define APP_INTERNAL "sstart"
 
 //#define DEBUG			//enable extra debugging code
@@ -79,13 +80,22 @@ extern pFrame pAppObj;
 extern const short AppIcon[];
 extern const short GForceIcon[];
 extern const UCHAR cmd_post_app_id[];
+extern const UCHAR ti_home[];
 
-extern ULONG gSettings;
 
-#define AutoStartMask(val) ((val&0xFFFF0000)>>16)
-#define LeakWatchMask(val) (val&0x0000FFFF)
-#define AutoStartInstalled() (AutoStartMask(gSettings)==PUP_ON)
-#define UseLeakWatch()	(LeakWatchMask(gSettings)==PUP_ON)
+typedef struct SSETTINGS{
+	WORD AutoStart;
+	WORD LeakWatch;
+}SETTINGS;
 
+extern SETTINGS gSettings;
+
+//#define AutoStartMask(val) ((val&0xFFFF0000)>>16)
+//#define LeakWatchMask(val) (val&0x0000FFFF)
+
+//#define AutoStartInstalled() (AutoStartMask(gSettings)==PUP_ON)
+#define AutoStartInstalled() (gSettings.AutoStart==PUP_ON)
+//#define UseLeakWatch()	(LeakWatchMask(gSettings)==PUP_ON)
+#define UseLeakWatch() (gSettings.LeakWatch==PUP_ON)
 
 #endif

@@ -7,7 +7,7 @@
 ***	Description: An Application designed to		***
 *** 			 Simplify the launching of ppg	***
 ***				 programs as well as normal		***
-***				 asm programs					***
+***				 asm and TI-BASIC programs		***
 ***************************************************/
 /*
     This file is part of Super Start.
@@ -15,9 +15,10 @@
     Super Start is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-    
-    You may use portions of this source code for your own projects
-    if you give me credit and a link to my website: http://calc.gregd.org/
+
+	You may use portions of the Super Start source code for your own projects
+	if you give me credit and a link to my website: http://calc.gregd.org/ 
+	in the project source code and documentation.
     
 */
 
@@ -34,7 +35,6 @@ enum XR_STRINGS {
 				  XR_st_sstart,
 				  XR_msg_sstart,
 				  
-				  XR_ShortAppName,
 				  XR_LongAppName,
 				  XR_About_Me,
 				  XR_Fail_HS_Active,
@@ -58,13 +58,23 @@ enum XR_STRINGS {
 //to declare the application XR_strings
 //this is due to limitations of the TIFS resource compiler
 //this information is current as of TIFS Version 1.1 Build 41
-//; rather, you must #define each string used in the resource like this:
+//rather, you must #define each string used in the resource like this:
 
 //this is rather high maintence...
-#define XR_LONG_APP_NAME	(OO_FIRST_APP_STRING + 7)
-#define XR_AUTO_COMPLETE	(OO_FIRST_APP_STRING + 14)
-#define XR_LEAK_WATCH		(OO_FIRST_APP_STRING + 15)
+#define XR_LONG_APP_NAME	(OO_FIRST_APP_STRING + 6)
+#define XR_AUTO_COMPLETE	(OO_FIRST_APP_STRING + 13)
+#define XR_LEAK_WATCH		(OO_FIRST_APP_STRING + 14)
 
+
+
+#define LANGUAGE_OFFSET (250)
+#define LANG_German		(OO_FIRST_APP_STRING + LANGUAGE_OFFSET + 0)
+#define LANG_English	(OO_FIRST_APP_STRING + LANGUAGE_OFFSET + 1)
+#define LANG_Spanish	(OO_FIRST_APP_STRING + LANGUAGE_OFFSET + 2)
+#define LANG_French		(OO_FIRST_APP_STRING + LANGUAGE_OFFSET + 3)
+#define LANG_Italian	(OO_FIRST_APP_STRING + LANGUAGE_OFFSET + 4)
+#define LANG_Dutch		(OO_FIRST_APP_STRING + LANGUAGE_OFFSET + 5)
+#define LANG_Swedish	(OO_FIRST_APP_STRING + LANGUAGE_OFFSET + 6)
 
 
 //Application Defined TI-Basic Extensions

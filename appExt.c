@@ -7,7 +7,7 @@
 ***	Description: An Application designed to		***
 *** 			 Simplify the launching of ppg	***
 ***				 programs as well as normal		***
-***				 asm programs					***
+***				 asm and TI-BASIC programs		***
 ***************************************************/
 /*
     This file is part of Super Start.
@@ -15,9 +15,10 @@
     Super Start is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-    
-    You may use portions of this source code for your own projects
-    if you give me credit and a link to my website: http://calc.gregd.org/
+
+	You may use portions of the Super Start source code for your own projects
+	if you give me credit and a link to my website: http://calc.gregd.org/ 
+	in the project source code and documentation.
     
 */
 
@@ -88,6 +89,8 @@ void ext_SSTART(void)
 	CONTROL_BITS savedctrl;
 	HANDLE cmd_post;
 	
+	if(JT_VERSION_CHECK())	return;	//don't run if the JT_VERSION flag is set... this should be done for all TI-BASIC Extensions!
+	
 	if(UseLeakWatch() && (cmd_post=EV_getAppID(cmd_post_app_id)))
 	{
 		LeakWatch_begin(cmd_post);
@@ -99,24 +102,35 @@ void ext_SSTART(void)
 	SET_SIDE_EFFECTS_PERMITTED;
 	
 	if(!remaining_element_count(top_estack))	ER_throwFrame(ER_TOO_FEW_ARGS, pAppObj);		//ER_throw(TOO_FEW_ARGS_ERROR);
+
+//the TIOS does not simplify input for us... so we do it by replacing the top value with the simplified version of it.
+//this will allow people to use sstart in the exact same way as ttstart.
+//For Example, Basic programmers will be able to write "tetris"->x:sstart(x) 	
+	push_simplify(top_estack);
+		
 	if(ESTACK(top_estack)!=STR_DATA_TAG)		ER_throwFrame(ER_EXPECTED_STRING_ARG, pAppObj);	//ER_throw(ER_ARG_MUST_BE_STRING);
 	
 	tmp_index=next_expression_index(top_estack);
 	src=(char*)tmp_index+2;	//pointer to the variable name of the program to be launched
+//we only want the program NAME - so ignore parenthesis, and anything that follows them
+	if((dest=strchr(src, '(')))*dest=0;
+	if(TokenizeName(src, tokbuf)==FS_BAD_NAME)				ER_throw(ER_RESERVED);
 	
-	//copy any passed arguments over for the launched program to use
-	//this is important because the TIOS expects any return values to be at the current top_estack.
-	push_quantum(END_TAG);	//TIGCC program _should_ destroy the estack upto the first END_TAG that it encounters if it returns a value.
+	
+//this is important because the TIOS expects any return values to be at the original top_estack.
+	top_estack=tmp_index;
+	tmp_index=next_expression_index(tmp_index);
+	PUSH_QUANTUM_NOCHECK(END_TAG);	//TIGCC programs _should_ destroy the estack up to the first END_TAG that it encounters if they returns a value.
+//copy any passed arguments over for the launched program to use
 	while(remaining_element_count(tmp_index))	//copy each argument (if any)
 	{
 		push_simplify(tmp_index);					//for whatever reason, TI-BASIC FLASH extensions don't get the simplified expression so we simplify it here...
 		tmp_index=next_expression_index(tmp_index);
 	}
 
-//we only want the program NAME - so ignore parenthesis, and anything that follows them
-	if((dest=strchr(src,'(')))*dest=0;
-		
-	if(TokenizeName(src,tokbuf)==FS_BAD_NAME)				ER_throw(ER_RESERVED);
+	tmp_index=top_estack;
+	
+//try to find the variable in question
 	if(!(symptr=DerefSym(SymFind(TokNameRight(tokbuf)))))	ER_throw(ER_UNDEFINED_VAR);
 	
 	h=symptr->hVal;
@@ -171,21 +185,33 @@ void ext_SSTART(void)
 				ER_throw(ER_INVALID_VAR_REF);
 		}
 		
-		EX_patch(dest,dest+len-1);
-		
+		EX_patch(dest,dest+len-1);		
 		asm("movem.l d0-d7/a0-a6,-(sp)\n", 4);	//this avoids bugs caused by programs not saving/restoring the registers properly
 		((void(*const)(void))dest)();				//launch!
 		asm(" nop\n nop\n nop\n nop\n nop\n",14);	//a way to ignore/fool the TIGCC return value hack
 		asm(" movem.l (sp)+,d0-d7/a0-a6\n",4);  //this avoids bugs caused by programs not saving/restoring the registers properly
 
-			if(!remaining_element_count(top_estack))			
+			#ifdef DEBUG
+			{
+			char buff[100];
+			sprintf(buff,"0x%lx 0x%lx",top_estack,tmp_index);
+			ST_helpMsg(buff);
+			ngetchx();
+			}
+			#endif
+			
+			//slighly more forgiving than remaining_element_count
+			//this allows programs to destroy more of the estack than they should without causing
+			//problems for Super Start.
+			if(top_estack<=tmp_index)	//if(!remaining_element_count(top_estack))
+			{
+				top_estack=tmp_index;
 				push_zstr(XR_stringPtr(XR_Done));
-
+			}
+			
 	FINALLY
 		if(h)HeapUnlock(h);
 		HeapFreeIndir((HANDLE *)&h_alloc);
-		
-		RestoreLCD();
 
 		NG_control=savedctrl;
 		
@@ -197,16 +223,6 @@ void ext_SSTART(void)
 	ENDFINAL		
 }
 
-void RestoreLCD(void)
-{//Binary of HSR v3.0
-	asm(" .word 0x48e7,0xfffe,0x2878,0x00c8,0x206c,0x0124,0x4e90,0x3f3c,0x000a\n"
-		" .word 0x206c,0x03ac,0x4e90,0x206c,0x038c,0x4e90,0x2f3c,0x0000,0x001e,0x3f3c\n"
-		" .word 0x00ff,0x200c,0x0280,0x0040,0x0000,0x6612,0x206c,0x00bc,0x0c28,0x00ef\n"
-		" .word 0x0002,0x6706,0x4878,0x56e6,0x6004,0x4878,0x5a2e,0x206c,0x09f0,0x4e90\n"
-		" .word 0x2054,0x2050,0x0050,0x2000,0x4aa8,0x0022,0x2068,0x0022,0x66f2,0x4fef\n"
-		" .word 0x000c,0x4cdf,0x7fff",104);//,0x4e75 (rts) 0x4e71(nop)
-}
-
 void ext_ABOUT(void)
 {
 	Access_AMS_Global_Variables;
@@ -214,10 +230,13 @@ void ext_ABOUT(void)
 	WINDOW win;
 	WIN_POINT ds_pt={4,1};
 	WIN_POINT post_pt;
+	
 	#ifndef NO_EASTER_EGGS
 		short leet_user=FALSE;
 		short key_code='x';//initialize it with something other than a valid key...
 	#endif
+	
+	if(JT_VERSION_CHECK())	return;	//don't run if the JT_VERSION flag is set... this should be done for all TI-BASIC Extensions!
 	
 	if(remaining_element_count(top_estack)) ER_throw(TOO_MANY_ARGS_ERROR);
 	

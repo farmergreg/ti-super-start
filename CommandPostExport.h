@@ -13,7 +13,7 @@
 #define _COMMAND_POST_H_
 
 #ifndef _TIAMS_H
-	#error Please include tiams.h before this header file
+	#error Please include tiams.h before the CommandPostExport.h header file
 #endif
 
 /*
