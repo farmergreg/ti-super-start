@@ -30,6 +30,17 @@
 #define APP_VERSION "1.30"
 #define APP_INTERNAL "sstart"
 
+#define AMSMajorRevisionRequired (2)
+#define AMSMinorRevisionRequired (5)
+
+#define LANGUAGE_ENGLISH
+//#define LANGUAGE_SPANISH
+//#define LANGUAGE_DUTCH
+//#define LANGUAGE_SWEDISH
+//#define LANGUAGE_GERMAN
+//#define LANGUAGE_FRENCH
+//#define LANGUAGE_ITALIAN
+
 //#define DEBUG			//enable extra debugging code
 
 #ifndef _89
@@ -51,7 +62,6 @@
 	#define C(x,y)(y)
 #endif
 
-/*
 //My own debuged replacment for TI's OS_NeedMinimumVersion macro
 //This Macro will mark the application for immediate removal if
 //the AMS version is too low.
@@ -71,7 +81,7 @@
          _OSVersionOK_ = TRUE;										\
    }																\
 }
-*/
+
       
 //This header requires certain other header files
 #include "xr.h"		//technically part of this header file; isolated for ease of editing

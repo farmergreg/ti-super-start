@@ -92,7 +92,7 @@ ENDFRAME
 //If anyone wants Super Start in a different language, just translate these strings and
 //send them to me.
 //"English" - English 
-
+#ifdef LANGUAGE_ENGLISH
 STRING_FRAME(appObj, OO_SYSTEM_FRAME, &appObjMain, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
 //App ext extension help strings
 	"about",														//XR_About
@@ -119,10 +119,11 @@ STRING_FRAME(appObj, OO_SYSTEM_FRAME, &appObjMain, OO_FIRST_STRING + OO_FIRST_AP
 	"You must specify the ASM or ppg program. Example: sstart(\"tetris\")",				//ER_TOO_FEW_ARGS
 	"You must place quotation marks around the name of the program. Example: sstart(\"tetris\")",		//ER_EXPECTED_STRING_ARG
 ENDFRAME
+#endif
 
-/*
+#ifdef LANGUAGE_SPANISH
 //"Espa" RF_N_TILDE "ol" - Spanish
-STRING_FRAME(appSpanish, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
+STRING_FRAME(appObj, OO_SYSTEM_FRAME, &appObjMain, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
 //App ext extension help strings
  "about",															//XR_About
  "Presentar la pantalla 'Acerca de..' de Super Start",				//XR_st_About
@@ -147,9 +148,11 @@ STRING_FRAME(appSpanish, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRI
  "Debe especificar el programa ASM o ppg. Ejemplo: sstart(\"tetris\")",						//ER_TOO_FEW_ARGS
  "Debe colocar comillas alrededor del nombre del programa. Ejemplo: sstart(\"tetris\")",	//ER_EXPECTED_STRING_ARG	
 ENDFRAME
+#endif
 
+#ifdef LANGUAGE_DUTCH
 //"Nederlands" - Dutch
-STRING_FRAME(appDutch, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS) 
+STRING_FRAME(appObj, OO_SYSTEM_FRAME, &appObjMain, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS) 
 //App ext extension help strings 
    "about",                                          //XR_About 
    "Toont het Over Super Start Scherm",                     //XR_st_About 
@@ -175,9 +178,11 @@ STRING_FRAME(appDutch, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRING
    "Je moet het ASM of ppg programma aangeven. Voorbeeld: sstart(\"tetris\")",            //ER_TOO_FEW_ARGS 
    "Je moet aanhalingstekens plaatsen rond de naam van het programma. Voorbeeld: sstart(\"tetris\")",      //ER_EXPECTED_STRING_ARG    
 ENDFRAME
+#endif
 
+#ifdef LANGUAGE_SWEDISH
 //"Svenska" - Swedish
-STRING_FRAME(appSwedish, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
+STRING_FRAME(appObj, OO_SYSTEM_FRAME, &appObjMain, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
 //App ext extension help strings 
 "about", //XR_About 
 "Visar information om Super start", //XR_st_About 
@@ -203,10 +208,11 @@ STRING_FRAME(appSwedish, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRI
 "Du måste ge ett namn på ett ppg- eller ASM-program. Exempel: sstart(\"tetris\")", //ER_TOO_FEW_ARGS 
 "Du måste sätta citationstecken runt namnet. exempel: sstart(\"tetris\")", //ER_EXPECTED_STRING_ARG 
 ENDFRAME
+#endif
 
-
+#ifdef LANGUAGE_GERMAN
 //"Deutsch" - German
-STRING_FRAME(appGerman, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
+STRING_FRAME(appObj, OO_SYSTEM_FRAME, &appObjMain, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
 //App ext extension help strings 
    "about",                                          //XR_About 
    "Zeigt den \"Über Super Start\"-Bildschirm",                     //XR_st_About 
@@ -232,10 +238,11 @@ STRING_FRAME(appGerman, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRIN
    "Sie müssen das ASM- oder ppg-Programm angeben. Z.B.: sstart(\"tetris\")",            //ER_TOO_FEW_ARGS 
    "Sie müssen Anführungszeichen um den Programmnamen herum setzen. Z.B.: sstart(\"tetris\")",      //ER_EXPECTED_STRING_ARG    
 ENDFRAME 
+#endif
 
-
+#ifdef LANGUAGE_FRENCH
 //"Fran" RF_C_CEDILLA "ais" -  French
-STRING_FRAME(appFrench, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
+STRING_FRAME(appObj, OO_SYSTEM_FRAME, &appObjMain, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
 //App ext extension help strings 
    "about",                                          //XR_About 
    "Affiche l'écran À propos de Super Start",                     //XR_st_About 
@@ -261,10 +268,11 @@ STRING_FRAME(appFrench, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRIN
    "Vous devez spécifier le programme ASM ou ppg. Exemple: sstart(\"tetris\")",            //ER_TOO_FEW_ARGS 
    "Vous devez placer des guillemets autour du nom du programme. Exemple: sstart(\"tetris\")",      //ER_EXPECTED_STRING_ARG    
 ENDFRAME 
+#endif
 
-
+#ifdef LANGUAGE_ITALIAN
 //"Italiano" - Italian
-STRING_FRAME(appItalian, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
+STRING_FRAME(appObj, OO_SYSTEM_FRAME, &appObjMain, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
 //App ext extension help strings 
    "about",                                          //XR_About 
    "Mostra lo schermo Informazioni su Super Start",                     //XR_st_About 
@@ -290,7 +298,7 @@ STRING_FRAME(appItalian, OO_SYSTEM_FRAME, 0, OO_FIRST_STRING + OO_FIRST_APP_STRI
    "Specificare il programma ASM o ppg. Esempio: sstart(\"tetris\")",            //ER_TOO_FEW_ARGS 
    "Devi mettere il nome del programma tra virgolette. Esempio: sstart(\"tetris\")",      //ER_EXPECTED_STRING_ARG    
 ENDFRAME
-*/
+#endif
 
 //////////////////////////////////////////////////
 //Application Data Section					  ///
@@ -298,7 +306,7 @@ ENDFRAME
 
 /* Pointer to the Frame object */
 	pFrame pAppObj = (pFrame)&appObj;	/* Must be the first global variable declared! */
-	pFrame AppLanguage=0;			/* Which Language Should This App Use */
+	//pFrame AppLanguage=0;				/* Which Language Should This App Use */
 
 //This is a bitmap structure, NOT an icon as suggested by the FRAME entry
 const short AppIcon[]={
@@ -326,9 +334,6 @@ const UCHAR ti_home[]="TIHOME";
 //The dialog options...
 SETTINGS gSettings;
 
-//typedef struct{unsigned short Field;unsigned short HdrLen;unsigned long Len;void*Data;}CERT_FIELD;
-typedef struct{void*Start,*Pos,*End;short EOFVal;}CFILE;
-
 //yes, this is THE primary event loop! (finally :)
 //not much to it eh? :)
 //Cannot use F-Line ROM_CALLs in most parts of it due to AMS 2.00 - 2.03 support.
@@ -337,34 +342,9 @@ static void Event_Handler(pFrame self, PEvent e)
 	Access_AMS_Global_Variables;
 	SETTINGS *g=&gSettings;
 	ULONG tmp_val;
-	BOOL _OSVersionOK_;
-	void * F_LINE_HANDLER_ADDRESS;
-	CFILE file;
 
+	CheckAMS(pAppObj, AMSMajorRevisionRequired, AMSMinorRevisionRequired);
 	
-//instead of using the CheckAMS macro, i've implemented a different method which allows people to hook Super Start and force it to
-//run on ams 2.00 through 2.03
-	#define AMSMajorRevisionRequired (2)
-	#define AMSMinorRevisionRequired (4)
-
-// Address of F-Line instructions handler.
-	F_LINE_HANDLER_ADDRESS = *(void **)0x2C;
-
-// Cannot work on AMS 2.03- if there is no custom F-Line handler (which we always check here).
-// Tests:
-// * number of ROM_CALLs high enough to use EX_getBasecodeParmBlock;
-// * AMS version < 2.04 (using EX_getBasecodeParmBlock).
-// * F-Line instructions handler being located in AMS itself.
-	if (   (   ((long const *)AMS_Global_Variables)[-1] < 1499 
-	        || ((BASECODE_PARM_BLOCK const *(* const)(void))AMS_Global_Variables[1498])()->version_number < (((AMSMajorRevisionRequired) << 8) + (AMSMinorRevisionRequired))) // EX_getBasecodeParmBlock.
-		&& (   (F_LINE_HANDLER_ADDRESS >= (void*)CertificateMemory) 
-		    && (F_LINE_HANDLER_ADDRESS < ((void *(*)(CFILE*))AMS_Global_Variables[0x4F3])(&file)))) // 'OO_GetFirstFlashAppSectorAddress'.
-	{
-		MY_ACB(pAppObj)->flags|=(ACB_JT_VERSION);
-		return;
-	}
-
-// If we come here, we have an AMS version that supports FLINE ROM Calls 
 	switch (e->command)
 	{
 		case CM_INSTALL:
