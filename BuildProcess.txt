@@ -1,6 +1,6 @@
 $Id$
 
-These Instructions apply to TI Flash Studio Version 1.1 Builds 37 through 42
+These Instructions apply to TI Flash Studio Version 1.1 Builds 37 through 43
 
 To Build sstart:
 1. always run clean.bat before opening a .fsp file
