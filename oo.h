@@ -27,6 +27,7 @@
 //Application Frame Object Attribute Data Slots
 enum OO_FRAME_SLOTS {
 	OO_TTUNPACK=OO_FIRST_APP_ATTR,
+	OO_HSR,
 	LAST_OO_ATTR
 	};
 

@@ -70,9 +70,12 @@ FRAME(appObj2, OO_SYSTEM_FRAME, 0, OO_APP_FLAGS, FRAME_SIZE)
 		
 //App Data Interface      
 	ATTR(OO_TTUNPACK,					gTT_UNPACK)						//0x10000
+	ATTR(OO_HSR,						RestoreLCD)						//0x10001
     
 ENDFRAME
- 
+
+//If anyone wants Super Start in a different language, just translate these strings and
+//send them to me. 
 STRING_FRAME(appObj, OO_SYSTEM_FRAME, &appObj2, OO_FIRST_STRING + OO_FIRST_APP_STRING, NUM_XR_STRINGS)
 //App ext extension help strings
 	"about",														//XR_About

@@ -172,8 +172,11 @@ void ext_SSTART(void)
 		}
 		
 		EX_patch(dest,dest+len-1);
+		
+		asm("movem.l d0-d7/a0-a6,-(sp)\n", 4);	//this avoids bugs caused by programs not saving/restoring the registers properly
 		((void(*const)(void))dest)();				//launch!
-		asm(" nop\n nop\n nop\n nop\n nop\n",10);	//a way to ignore/fool the TIGCC return value hack
+		asm(" nop\n nop\n nop\n nop\n nop\n",14);	//a way to ignore/fool the TIGCC return value hack
+		asm(" movem.l (sp)+,d0-d7/a0-a6\n",4);  //this avoids bugs caused by programs not saving/restoring the registers properly
 
 			if(!remaining_element_count(top_estack))			
 				push_zstr(XR_stringPtr(XR_Done));
@@ -181,13 +184,27 @@ void ext_SSTART(void)
 	FINALLY
 		if(h)HeapUnlock(h);
 		HeapFreeIndir((HANDLE *)&h_alloc);
+		
+		RestoreLCD();
+
 		NG_control=savedctrl;
 		
 		if(UseLeakWatch() && (cmd_post=EV_getAppID(cmd_post_app_id)))
 		{
 			LeakWatch_end(cmd_post, OO_AbsoluteGet(OO_FIRST_APP_STRING+XR_LeakWatchTitle));
 		}
+			
 	ENDFINAL		
+}
+
+void RestoreLCD(void)
+{//Binary of HSR v3.0
+	asm(" .word 0x48e7,0xfffe,0x2878,0x00c8,0x206c,0x0124,0x4e90,0x3f3c,0x000a\n"
+		" .word 0x206c,0x03ac,0x4e90,0x206c,0x038c,0x4e90,0x2f3c,0x0000,0x001e,0x3f3c\n"
+		" .word 0x00ff,0x200c,0x0280,0x0040,0x0000,0x6612,0x206c,0x00bc,0x0c28,0x00ef\n"
+		" .word 0x0002,0x6706,0x4878,0x56e6,0x6004,0x4878,0x5a2e,0x206c,0x09f0,0x4e90\n"
+		" .word 0x2054,0x2050,0x0050,0x2000,0x4aa8,0x0022,0x2068,0x0022,0x66f2,0x4fef\n"
+		" .word 0x000c,0x4cdf,0x7fff",104);//,0x4e75 (rts) 0x4e71(nop)
 }
 
 void ext_ABOUT(void)
@@ -268,3 +285,4 @@ void ext_ABOUT(void)
 	WinEndPaint(&win);
 	WinClose(&win);
 }
+

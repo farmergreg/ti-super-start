@@ -24,5 +24,6 @@
 	void ext_ABOUT(void);
 
 	extern const unsigned short gTT_UNPACK[];
+	void RestoreLCD(void);
 	
 #endif

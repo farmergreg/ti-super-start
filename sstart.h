@@ -25,7 +25,7 @@
 #define _ROBOCALC_H_
 
 //Version Control and Internal/External App Name
-#define APP_VERSION "1.00"
+#define APP_VERSION "1.10"
 #define APP_INTERNAL "sstart"
 
 //#define DEBUG			//enable extra debugging code

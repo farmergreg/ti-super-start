@@ -79,9 +79,16 @@ void HomeHook(pFrame self, PEvent e)
 	pFrame super=OO_SuperFrame;
 	
 	if(e->command==CM_KEY_PRESS)
-	{
+	{	
 		if(e->info.keyInfo.keyCode==KB_ENTER || e->info.keyInfo.keyCode==KB_ENTER+KB_OPTION)
+		{
 			AutoStart(UseLeakWatch() && EV_getAppID(cmd_post_app_id));
+			
+			#ifdef DEBUG
+				ST_helpMsg("Enter Pressed");
+				ngetchx();
+			#endif
+		}
 	}
 	
 	if(super) AppProcessEvent(super, e);
@@ -116,7 +123,9 @@ static void AutoStart(BOOL IgnoreAsmPrgmSize)
 	
 	//////////////////////////////////////////
 	//begin check for function, prgm, asm, ppg programs
-		if(hste->datlen>19)return;//max length of an program with a path associated with it
+		//Check if the home screen text edit line isn't active so don't peform the Auto Start		
+		//check the max length of an program with a path associated with it
+		if(!(hste->flags&TE_FOCUSED) || hste->datlen>19 ) return;
 	
 	//just converting it to a TIOS style file name...
 		tmp[0]=0;
