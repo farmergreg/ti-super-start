@@ -211,7 +211,7 @@ void ext_SSTART(void)
         
         	while (p<q && *(unsigned long*)p!=0xDEADDEAD) p+=2;
 			p+=2[(short *)p]?8:12;
-			*(void **)(long)*(short *)p=(void*)((hardwareRevision == 3) ? dest : 0x3f000);
+			*(void **)(long)*(short *)p=(hardwareRevision == 3) ? dest : (void*)0x3f000;
 		}
 		
 		EX_patch(dest,dest+len-1);		
