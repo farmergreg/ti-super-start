@@ -29,7 +29,6 @@
 //Application Frame Object Attribute Data Slots
 enum OO_FRAME_SLOTS {
 	OO_TTUNPACK=OO_FIRST_APP_ATTR,
-//	OO_AMS_OK,	//This is a special hook which allows Super Start to run on AMS 2.00 - 2.04 if this attribute has a value
 	LAST_OO_ATTR
 	};
 

@@ -73,7 +73,6 @@ FRAME(appObjMain, OO_SYSTEM_FRAME, 0, OO_APP_FLAGS, FRAME_SIZE)
 		
 //App Data Interface      
 	ATTR(OO_TTUNPACK,					gTT_UNPACK)						//0x10000
-//	ATTR(OO_AMS_OK,						FALSE)							//0x10001		This is a special hook which allows Super Start to run on AMS 2.00 - 2.04 if this attribute has a value
     
 ENDFRAME
 
