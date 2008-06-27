@@ -27,7 +27,7 @@
 #define _SUPERSTART_H_
 
 //Version Control and Internal/External App Name
-#define APP_VERSION "1.30"
+#define APP_VERSION "2.00"
 #define APP_INTERNAL "sstart"
 
 #define AMSMajorRevisionRequired (2)
@@ -91,7 +91,7 @@ char* About(void);
 
 extern pFrame pAppObj;
 extern const short AppIcon[];
-extern const short GForceIcon[];
+extern const short DSIcon[];
 extern const UCHAR cmd_post_app_id[];
 extern const UCHAR ti_home[];
 
