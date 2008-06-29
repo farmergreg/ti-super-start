@@ -1,3 +1,4 @@
+# $ID$
 AddHandler IceBox/htm-parse .htm
 Action IceBox/htm-parse  "/superstart/wrapper.php?key=125sdgsdfg4mn4580zlgmk34Kl&file="
 
