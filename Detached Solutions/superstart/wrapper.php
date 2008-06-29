@@ -1,7 +1,7 @@
 <?php
 //wrapper.php written 07/12/2003 By Gregory Dietsche for IceBox. All Rights Reserved.
 //Modified 7/25/2003 by Greg to work with the DS website.
-// $ID$
+// $Id$
 
 //ignore any leading slashes as they will not be necessary (this is partially security related)
 	$file=ltrim($_GET['file'],"\\/");
